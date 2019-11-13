@@ -1,0 +1,44 @@
+{
+  "sku": {
+    "name": "Standard_LRS",
+    "tier": "Standard"
+  },
+  "kind": "Storage",
+  "id": "/subscriptions/e93d3ee6-fac1-412f-92d6-bfb379e81af2/resourceGroups/test-005/providers/Microsoft.Storage/storageAccounts/storagedczol7xfovaoe",
+  "name": "storagedczol7xfovaoe",
+  "type": "Microsoft.Storage/storageAccounts",
+  "location": "eastus",
+  "tags": {},
+  "properties": {
+    "networkAcls": {
+      "bypass": "AzureServices",
+      "virtualNetworkRules": [],
+      "ipRules": [],
+      "defaultAction": "Allow"
+    },
+    "supportsHttpsTrafficOnly": true,
+    "encryption": {
+      "services": {
+        "file": {
+          "enabled": true,
+          "lastEnabledTime": "2019-11-11T23:54:22.6182369Z"
+        },
+        "blob": {
+          "enabled": true,
+          "lastEnabledTime": "2019-11-11T23:54:22.6182369Z"
+        }
+      },
+      "keySource": "Microsoft.Storage"
+    },
+    "provisioningState": "Succeeded",
+    "creationTime": "2019-11-11T23:54:22.5713478Z",
+    "primaryEndpoints": {
+      "blob": "https://storagedczol7xfovaoe.blob.core.windows.net/",
+      "queue": "https://storagedczol7xfovaoe.queue.core.windows.net/",
+      "table": "https://storagedczol7xfovaoe.table.core.windows.net/",
+      "file": "https://storagedczol7xfovaoe.file.core.windows.net/"
+    },
+    "primaryLocation": "eastus",
+    "statusOfPrimary": "available"
+  }
+}
