@@ -18,7 +18,7 @@ Register-PSRepository -Name WhatIfRepository -SourceLocation https://pkgs.dev.az
 ```
 
 ```PowerShell
-Install-Module -Name Az.Resources -Repository WhatIfRepository -RequiredVersion 2.0.1-alpha3 -AllowPrerelease -AllowClobber -Credential $credential
+Install-Module -Name Az.Resources -Repository WhatIfRepository -RequiredVersion 2.0.1-alpha4 -AllowPrerelease -AllowClobber -Credential $credential
 ```
 
 * If you want to switch back to another installed version, simply run:
@@ -33,7 +33,7 @@ Find-Module -Name Az.Resources -Repository WhatIfRepository -AllVersions -AllowP
 
 * If you are done testing the package, you may uninstall it by running:
 ```PowerShell
-Uninstall-Module -Name Az.Resources -RequiredVersion 2.0.1-alpha3 -AllowPrerelease
+Uninstall-Module -Name Az.Resources -RequiredVersion 2.0.1-alpha4 -AllowPrerelease
 ```
 
 ## Known issue
