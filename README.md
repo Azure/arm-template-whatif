@@ -2,7 +2,8 @@
 
 This repo is a little bit abnormal in that it is solely for keeping track of issues in the ARM Template what-if API. If you want to learn more about the what-if feature, you can take a look at this doc on the full capabilities of the what-if API and corresponding PowerShell cmdlet.
 
-[Using the what-if feature of ARM Template deployments](https://google.com)
+ * [Resource Manager template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/template-deploy-what-if)
+ * [What's new in ARM Templates - November 2019 #MSIgnite Session (YouTube)](https://www.youtube.com/watch?v=3D-JIKShrws&feature=youtu.be&t=771)
 
 ## What types of issues are you looking for?
 
