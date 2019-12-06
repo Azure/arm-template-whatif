@@ -15,7 +15,7 @@ assignees: ''
 
 **Client (PowerShell, Azure CLI, or API)**
 
-**Relevant ARM Template code (we only need the resource object specified in #1 and #2, but if it's easier you can include the entire template**
+**Relevant ARM Template code (we only need the resource object for the above `resourceType` and `apiVersion`, but if it's easier you can include the entire template**
 
 **Expected response (i.e. "I expected no noise since the template has not been modified since the resources were deployed)**
 
