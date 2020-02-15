@@ -18,7 +18,7 @@ Register-PSRepository -Name WhatIfRepository -SourceLocation https://pkgs.dev.az
 ```
 
 ```PowerShell
-Install-Module -Name Az.Resources -Repository WhatIfRepository -RequiredVersion 2.0.1-alpha4 -AllowPrerelease -AllowClobber -Credential $credential
+Install-Module -Name Az.Resources -Repository WhatIfRepository -RequiredVersion 2.0.1-alpha4 -AllowPrerelease -AllowClobber -Credential $credential -SkipPublisherCheck
 ```
 
 * If you want to switch back to another installed version, simply run:
