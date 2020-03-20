@@ -33,7 +33,7 @@ Find-Module -Name Az.Resources -Repository WhatIfRepository -AllVersions -AllowP
 
 * If you are done testing the package, you may uninstall it by running:
 ```PowerShell
-Uninstall-Module -Name Az.Resources -RequiredVersion 2.0.1-alpha4 -AllowPrerelease
+Uninstall-Module -Name Az.Resources -RequiredVersion 2.0.1-alpha5 -AllowPrerelease
 ```
 
 ## Known issue
