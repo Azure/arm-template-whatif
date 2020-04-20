@@ -2,8 +2,15 @@
 
 This repo is a little bit abnormal in that it is solely for keeping track of issues in the ARM Template what-if API. If you want to learn more about the what-if feature, you can take a look at this doc on the full capabilities of the what-if API and corresponding PowerShell cmdlet.
 
- * [Resource Manager template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/template-deploy-what-if)
+ * [ARM template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/template-deploy-what-if)
  * [What's new in ARM Templates - November 2019 #MSIgnite Session (YouTube)](https://www.youtube.com/watch?v=3D-JIKShrws&feature=youtu.be&t=771)
+
+## Install PowerShell module
+To use What-If in PowerShell, install a preview version of the Az.Resources module from the PowerShell gallery by running:
+```
+Install-Module Az.Resources -RequiredVersion 1.12.1-preview -AllowPrerelease
+```
+If you previously installed an alpha version of the what-if module, take the steps described in the [ARM template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-deploy-what-if#uninstall-alpha-version) doc to uninstall that module.
 
 ## What types of issues are you looking for?
 
