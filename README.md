@@ -5,6 +5,8 @@ This repo is a little bit abnormal in that it is solely for keeping track of iss
  * [ARM template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/template-deploy-what-if)
  * [What's new in ARM Templates - November 2019 #MSIgnite Session (YouTube)](https://www.youtube.com/watch?v=3D-JIKShrws&feature=youtu.be&t=771)
 
+ For a guided tutorial on What-If, check out this [MS LEARN module](https://docs.microsoft.com/en-us/learn/modules/arm-template-test/).
+
 ## Install PowerShell module
 To use What-If in PowerShell, install a preview version of the Az.Resources module from the PowerShell gallery by running:
 ```
