@@ -7,6 +7,17 @@ This repo is a little bit abnormal in that it is solely for keeping track of iss
 
  For a guided tutorial on What-If, check out this [MS LEARN module](https://docs.microsoft.com/en-us/learn/modules/arm-template-test/).
 
+## Recent Updates and Enhancements
+* We removed the need for the user/spn to have /write permission on the resources if the user specified the “no rbac” flag. Now we can add the flag ```-validationLevel "ProviderNoRbac"``` to achieve this.
+* To prevent secrets from leaking, ```SecureString``` and ```SecureObject``` parameters have always been replaced with placeholders in the WhatIf output. WhatIf will now also replace values dervied from ```SecureString``` and ```SecureObject``` parameters with placeholders.
+* **Issue:** WhatIf no longer checks for deny policy violations, leading to false negatives in validation.
+    * **Status:** Fix awaiting rollout
+* **Issue:** WhatIf was previously only able to analyze nested deployment resources (Bicep modules) when all parameters passed to the nested deployment used “deploy-time constant” values, causing the evaluation of the template to “short-circuit” when a value derived from a reference to another resource was passed to a module as a parameter. This led to WhatIf analysis frequently being incomplete for templates relying on nested deployments. 
+    * **Status:** To help improve this significantly we made changes to whatIf that further expand the range of whatIf evaluation possible in a template, providing a more complete picture of before and after for all resources in the template. WhatIf is now able to provide the same experience regardless of how a deployment is broken up into modules or nested deployments. Note: This change may result in more  latent “noise” (false positives) given that noise originating from resources in modules or nested deployments may have been surpressed due to short-ciruiting. We plan on addressing this in a future vNext project known as “Noise Reduction” mentioned below.
+## Future Invemestments
+* **Deployment Stacks What-if:** You will be able to see WhatIf results evaluated in the context of deployment stacks, including aggregation of deletes and resource operations
+* **Noise-reduction for Stacks What-if:** This works aims to improve WhatIf by now filtering out noisy properties, significantly reducing "what-if noise" and improving result reliability
+
 ## Install PowerShell module
 To use What-If in PowerShell, install a preview version of the Az.Resources module from the PowerShell gallery by running:
 ```
@@ -97,3 +108,4 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
