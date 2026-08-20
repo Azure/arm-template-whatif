@@ -2,31 +2,50 @@
 
 This repo is a little bit abnormal in that it is solely for keeping track of issues in the ARM Template what-if API. If you want to learn more about the what-if feature, you can take a look at this doc on the full capabilities of the what-if API and corresponding PowerShell cmdlet.
 
- * [ARM template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/template-deploy-what-if)
+ * [ARM template deployment what-if operation](https://learn.microsoft.com/azure/azure-resource-manager/templates/deploy-what-if)
+ * [What-if for Azure deployment stacks](https://learn.microsoft.com/azure/azure-resource-manager/bicep/deployment-stacks-what-if)
  * [What's new in ARM Templates - November 2019 #MSIgnite Session (YouTube)](https://www.youtube.com/watch?v=3D-JIKShrws&feature=youtu.be&t=771)
 
- For a guided tutorial on What-If, check out this [MS LEARN module](https://docs.microsoft.com/en-us/learn/modules/arm-template-test/).
+ For a guided tutorial on What-If, check out this [MS Learn module](https://learn.microsoft.com/training/modules/arm-template-test/).
 
 ## Recent Updates and Enhancements
+* **What-if for Azure deployment stacks is generally available** (August 2026). Stacks what-if evaluates a change in the context of a deployment stack, adds the `Detach` and `Delete` change types for resources leaving stack management, and writes a durable `Microsoft.Resources/deploymentStacksWhatIfResults` resource you can retrieve later or use as a pipeline approval artifact. See the [announcement](https://techcommunity.microsoft.com/blog/azuregovernanceandmanagementblog/now-generally-available-what-if-for-azure-deployment-stacks/4547614) and the [documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/deployment-stacks-what-if).
+* **Noise reduction for stacks what-if is enabled in all regions.** Stacks what-if filters properties that are unchanged against a baseline recorded when the stack was deployed, which removes a large class of the false positives this repo was created to track. Two things worth knowing: the baseline only exists once a stack has been deployed or updated, so it does not apply to a first deployment, and it removes many common differences rather than every difference.
 * We removed the need for the user/spn to have /write permission on the resources if the user specified the “no rbac” flag. Now we can add the flag ```-validationLevel "ProviderNoRbac"``` to achieve this.
-* To prevent secrets from leaking, ```SecureString``` and ```SecureObject``` parameters have always been replaced with placeholders in the WhatIf output. WhatIf will now also replace values dervied from ```SecureString``` and ```SecureObject``` parameters with placeholders.
+* To prevent secrets from leaking, ```SecureString``` and ```SecureObject``` parameters have always been replaced with placeholders in the WhatIf output. WhatIf will now also replace values derived from ```SecureString``` and ```SecureObject``` parameters with placeholders.
+
+## Recently Resolved
+
+* **Deny policy validation** is being evaluated again. A template that violates a deny policy assignment now returns `RequestDisallowedByPolicy` through the what-if path rather than silently passing.
+* **Nested deployment short-circuiting** was addressed and rolled out to all regions (tracked in [#157](https://github.com/Azure/arm-template-whatif/issues/157)). What-if now expands nested deployments whose parameters are derived from a `reference()` to another resource, so evaluation no longer stops at the module boundary.
 
 ## Ongoing Issues
-* **Issue:** WhatIf no longer checks for deny policy violations, leading to false negatives in validation.
-    * **Status:** Fix awaiting rollout
-* **Issue:** WhatIf was previously only able to analyze nested deployment resources (Bicep modules) when all parameters passed to the nested deployment used “deploy-time constant” values, causing the evaluation of the template to “short-circuit” when a value derived from a reference to another resource was passed to a module as a parameter. This led to WhatIf analysis frequently being incomplete for templates relying on nested deployments. 
-    * **Status:** To help improve this significantly we made changes to whatIf that further expand the range of whatIf evaluation possible in a template, providing a more complete picture of before and after for all resources in the template. WhatIf is now able to provide the same experience regardless of how a deployment is broken up into modules or nested deployments. Note: This change may result in more  latent “noise” (false positives) given that noise originating from resources in modules or nested deployments may have been surpressed due to short-ciruiting. We plan on addressing this in a future vNext project known as “Noise Reduction” mentioned below.
 
-## Future Invemestments
-* **Deployment Stacks What-if:** You will be able to see WhatIf results evaluated in the context of deployment stacks, including aggregation of deletes and resource operations. ETA - 11/15/25
-* **Noise-reduction for Stacks What-if:** This works aims to improve WhatIf by now filtering out noisy properties, significantly reducing "what-if noise" and improving result reliability. ETA - 12/15/25
+Noise reduction addresses false positives, meaning properties reported as changed that did not change. It does not address the classes below, which is why they remain open:
 
-## Install PowerShell module
-To use What-If in PowerShell, install a preview version of the Az.Resources module from the PowerShell gallery by running:
+* **Array element identity.** Elements of an array are matched positionally rather than by key, so reordering or inserting can render a real change as an unrelated pair of edits. Tracked in [#387](https://github.com/Azure/arm-template-whatif/issues/387).
+* **Missed changes.** A change that is never reported at all. Filtering unchanged properties cannot surface something absent from the result.
+* **Incorrect change types.** A resource reported as `Create` when it already exists, or a `Delete` the service does not perform.
+* **Unevaluated expressions.** `reference()` is not evaluated during what-if, so values derived from it cannot be compared. Tracked in [#83](https://github.com/Azure/arm-template-whatif/issues/83).
+* **Provider-returned property noise on standard deployments.** Stacks what-if filters this class, but standard deployment what-if still reports it. Tracked per resource family in [#90](https://github.com/Azure/arm-template-whatif/issues/90), [#176](https://github.com/Azure/arm-template-whatif/issues/176), [#279](https://github.com/Azure/arm-template-whatif/issues/279), [#284](https://github.com/Azure/arm-template-whatif/issues/284), [#297](https://github.com/Azure/arm-template-whatif/issues/297) and [#337](https://github.com/Azure/arm-template-whatif/issues/337).
+
+## Install the tooling
+
+What-if is generally available, so no preview or prerelease module is required.
+
+PowerShell:
 ```
-Install-Module Az.Resources -RequiredVersion 1.12.1-preview -AllowPrerelease
+Install-Module Az.Resources
 ```
-If you previously installed an alpha version of the what-if module, take the steps described in the [ARM template deployment what-if operation (Preview)](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-deploy-what-if#uninstall-alpha-version) doc to uninstall that module.
+
+The stacks what-if cmdlets (`New-AzResourceGroupDeploymentStackWhatIfResult` and its subscription and management group equivalents) require `Az.Resources` 10.1.0 or later.
+
+Azure CLI:
+```
+az upgrade
+```
+
+The `az stack-whatif` command group requires Azure CLI 2.89.0 or later. Standard deployment what-if (`az deployment group what-if`) is available in earlier versions.
 
 ## What types of issues are you looking for?
 
